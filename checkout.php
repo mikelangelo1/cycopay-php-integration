@@ -115,7 +115,7 @@ span.price {
 		echo'
 			<div class="col-75">
 				<div class="container-checkout">
-				<form id="checkout_form" action="checkout_process.php" method="POST" class="was-validated">
+				<form id="checkout_form" action="checkout_process.php"  method="POST" class="was-validated">
 
 					<div class="row-checkout">
 					
@@ -154,23 +154,19 @@ span.price {
 						</div>
 						
 						
-						<label for="cname">Name on Card</label>
-						<input type="text" id="cname" name="cardname" class="form-control" pattern="^[a-zA-Z ]+$" required>
+						<input type="hidden" id="cname" name="cardname" class="form-control" pattern="^[a-zA-Z ]+$" required>
 						
 						<div class="form-group" id="card-number-field">
-                        <label for="cardNumber">Card Number</label>
-                        <input type="text" class="form-control" id="cardNumber" name="cardNumber" required>
+                        <input type="hidden" class="form-control" id="cardNumber" name="cardNumber" required>
                     </div>
-						<label for="expdate">Exp Date</label>
-						<input type="text" id="expdate" name="expdate" class="form-control" pattern="^((0[1-9])|(1[0-2]))\/(\d{2})$" placeholder="12/22"required>
+						<input type="hidden" id="expdate" name="expdate" class="form-control" pattern="^((0[1-9])|(1[0-2]))\/(\d{2})$" placeholder="12/22"required>
 						
 
 						<div class="row">
 						
 						<div class="col-50">
 							<div class="form-group CVV">
-								<label for="cvv">CVV</label>
-								<input type="text" class="form-control" name="cvv" id="cvv" required>
+								<input type="hidden" class="form-control" name="cvv" id="cvv" required>
 						</div>
 						</div>
 					</div>
@@ -201,12 +197,16 @@ span.price {
 				echo'	
 				<input type="hidden" name="total_count" value="'.$total_count.'">
 					<input type="hidden" name="total_price" value="'.$total.'">
-					
-					<input type="submit" id="submit" value="Continue to checkout" class="checkout-btn">
+					';
+					echo '
+					 <button type="submit" target="_blank">Continue to checkout</button>
 				</form>
 				</div>
 			</div>
 			';
+
+		
+			
 		}else{
 			echo"<script>window.location.href = 'cart.php'</script>";
 		}

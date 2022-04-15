@@ -17,7 +17,52 @@ if (isset($_SESSION["uid"])) {
     $cardnumberstr=(string)$cardnumber;
     $total_count=$_POST['total_count'];
     $prod_total = $_POST['total_price'];
+
+
+
     
+    $url = "https://cycosolutions-backend.herokuapp.com/api/public/payment/create";
+    $amount = $prod_total;
+
+    $data_array1 = array(
+        "apiKey" => "4431541f-96fe-47d2-875b-31dd86405f58",
+        "amount" => $amount,
+        "webhookURL" => "https://eob3ixjypw0qe8n.m.pipedream.net",
+        "returnURL" => "https://github.com/mikelangelo1",
+        "description" => "Postman public Tx"
+    );
+
+    $header = array(
+        'Content-Type: application/json',
+        'Accept-Encoding: gzip, deflate',
+
+    );
+
+
+    $data = json_encode($data_array1);
+
+    $ch = curl_init();
+
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+
+
+    $resp = curl_exec($ch);
+	curl_close($ch);	
+    
+    if($e = curl_error($ch)) {
+	    echo $e;
+	} else  {
+        $decoded = json_decode($resp);
+        $paymentLink = $decoded->url;
+        header("Location: $paymentLink");
+
+    }
+   
     
     $sql0="SELECT order_id from `orders_info`";
     $runquery=mysqli_query($con,$sql0);
@@ -57,17 +102,7 @@ if (isset($_SESSION["uid"])) {
             $sql1="INSERT INTO `order_products` 
             (`order_pro_id`,`order_id`,`product_id`,`qty`,`amt`) 
             VALUES (NULL, '$order_id','$prod_id','$prod_qty','$sub_total')";
-            if(mysqli_query($con,$sql1)){
-                $del_sql="DELETE from cart where user_id=$user_id";
-                if(mysqli_query($con,$del_sql)){
-                    echo"<script>window.location.href='store.php'</script>";
-                }else{
-                    echo(mysqli_error($con));
-                }
-
-            }else{
-                echo(mysqli_error($con));
-            }
+ 
             $i++;
 
 
